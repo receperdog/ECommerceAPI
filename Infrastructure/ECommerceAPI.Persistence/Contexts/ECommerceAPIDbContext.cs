@@ -14,6 +14,8 @@ namespace ECommerceAPI.Persistence.Contexts
         //DbContext kullanırken belirli optionlara ulaşabilmemiz için bu ayarların constructor içinde yapılması gerekir.
         //Bu constructor içinde DbContextOptionsBuilder nesnesi oluşturulur.
         //Bu constructor IoC container içerisinde doldurulur. Eğer bunu koymazsak süreçte hata alırız.
+        ////Bu Class'ı IoC container içerisinde doldurmak için Startup.cs dosyasındaki ConfigureServices metodunu override ederiz.
+        //IoC Container içerisine eklemek lazım çünkü gerektiği zaman erişilebilmeli.
         public ECommerceAPIDbContext(DbContextOptions<ECommerceAPIDbContext> options) : base(options)
         {
 
