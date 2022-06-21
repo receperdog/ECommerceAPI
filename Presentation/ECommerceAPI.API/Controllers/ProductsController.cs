@@ -11,39 +11,29 @@ namespace ECommerceAPI.API.Controllers
     {
         readonly private IProductWriteRepository productWriteRepository;
         readonly private IProductReadRepository productReadRepository;
+        readonly private IOrderWriteRepository orderWriteRepository;
+        readonly private ICustomerWriteRepository customerWriteRepository;
+        
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerWriteRepository customerWriteRepository)
         {
             this.productWriteRepository = productWriteRepository;
             this.productReadRepository = productReadRepository;
+            this.orderWriteRepository = orderWriteRepository;
+            this.customerWriteRepository = customerWriteRepository;
         }    
 
-        //get all products
         [HttpGet]
         public async Task Get()
         {
-            await productWriteRepository.addAsync(new List<Product> {
-                new Product {
-                    Id = Guid.NewGuid(),
-                    Name = "Product 1",
-                    Description = "Product 1 description",
-                    
-                },
-                new Product {
-                    Id = Guid.NewGuid(),
-                    Name = "Product 2",
-                    Description = "Product 2 description",
-                   
-                },
-                new Product {
-                   Id = Guid.NewGuid(),
-                    Name = "Product 3",
-                    Description = "Product 3 description",
-                   
-                }
-            });
+            var customerId = Guid.NewGuid();
+            await customerWriteRepository.addAsync(new() { Id = customerId, FirstName = "John", LastName = "Doe" });
+            await orderWriteRepository.addAsync(new() { Description = "Teste", Address = "ankara", CustomerId = customerId });
+            await orderWriteRepository.addAsync(new() { Description = "Meste", Address = "antalya" });
+            await orderWriteRepository.saveAsync();
+            await customerWriteRepository.saveAsync();
 
-            await productWriteRepository.saveAsync();
+
         }
 
         [HttpGet("{id}")]
