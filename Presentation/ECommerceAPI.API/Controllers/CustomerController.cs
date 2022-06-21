@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Application.Repositories;
+using ECommerceAPI.Application.ViewModels.Customers;
 using ECommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,38 +40,46 @@ namespace ECommerceAPI.API.Controllers
 
         //post Customer
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Customer Customer)
+        public async Task<IActionResult> Post(ViewModel_Customer_Create model)
         {
-            if (Customer == null)
+            if (model == null)
             {
                 return BadRequest();
             }
-            await CustomerWriteRepository.addAsync(Customer);
-            return CreatedAtAction("Get", new { id = Customer.Id }, Customer);
+            await CustomerWriteRepository.addAsync(
+                new()
+                {                    
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    Phone = model.Phone                        
+                }
+                );
+            await CustomerWriteRepository.saveAsync();
+            return Ok();
         }
         //put Customer
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] Customer Customer)
+        public async Task<IActionResult> Put(ViewModel_Customer_Update model)
         {
-            if (Customer == null)
+            if (model == null)
             {
                 return BadRequest();
             }
-            var CustomerToUpdate = await CustomerReadRepository.GetByIdAsync(id);
-            if (CustomerToUpdate == null)
+            var Customer = await CustomerReadRepository.GetByIdAsync(model.Id);
+            if (Customer == null)
             {
                 return NotFound();
             }
-            CustomerToUpdate.FirstName = Customer.FirstName;
-            CustomerToUpdate.LastName = Customer.LastName;
-            CustomerToUpdate.Email = Customer.Email;
-            CustomerToUpdate.Phone = Customer.Phone;
-
+            Customer.FirstName = model.FirstName;
+            Customer.LastName = model.LastName;
+            Customer.Email = model.Email;
+            Customer.Phone = model.Phone;
             await CustomerWriteRepository.saveAsync();
             return Ok();
 
-
-
         }
+        
+        
     }
 }

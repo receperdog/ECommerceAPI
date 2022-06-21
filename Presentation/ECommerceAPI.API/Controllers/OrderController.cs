@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Application.Repositories;
+using ECommerceAPI.Application.ViewModels.Orders;
 using ECommerceAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,36 +40,41 @@ namespace ECommerceAPI.API.Controllers
 
         //post Order
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Order Order)
+        public async Task<IActionResult> Post(ViewModel_Order_Create model)
         {
-            if (Order == null)
+            if (model == null)
             {
                 return BadRequest();
             }
-            await OrderWriteRepository.addAsync(Order);
-            return CreatedAtAction("Get", new { id = Order.Id }, Order);
+            await OrderWriteRepository.addAsync(
+                new()
+                {
+                    CustomerMessage = model.CustomerMessage,
+                    Description = model.Description,
+                    Address = model.Address
+                }
+                );
+            await OrderWriteRepository.saveAsync();
+            return Ok();
         }
         //put Order
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] Order Order)
+        public async Task<IActionResult> Put(ViewModel_Order_Update model)
         {
-            if (Order == null)
+            if (model == null)
             {
                 return BadRequest();
             }
-            var OrderToUpdate = await OrderReadRepository.GetByIdAsync(id);
-            if (OrderToUpdate == null)
+            var Order = await OrderReadRepository.GetByIdAsync(model.Id);
+            if (Order == null)
             {
                 return NotFound();
             }
-            OrderToUpdate.Address = Order.Address;
-            OrderToUpdate.CustomerMessage = Order.CustomerMessage;
-            OrderToUpdate.Description = Order.Description;
+            Order.CustomerMessage = model.CustomerMessage;
+            Order.Description = model.Description;
+            Order.Address = model.Address;
             await OrderWriteRepository.saveAsync();
             return Ok();
-
-
-
         }
     }
 }
