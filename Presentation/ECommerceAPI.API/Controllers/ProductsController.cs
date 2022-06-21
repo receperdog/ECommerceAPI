@@ -20,7 +20,7 @@ namespace ECommerceAPI.API.Controllers
 
         //get all products
         [HttpGet]
-        public async void Get()
+        public async Task Get()
         {
             await productWriteRepository.addAsync(new List<Product> {
                 new Product {
@@ -45,7 +45,18 @@ namespace ECommerceAPI.API.Controllers
 
             await productWriteRepository.saveAsync();
         }
-        
-        
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var product = await productReadRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
+
     }
 }

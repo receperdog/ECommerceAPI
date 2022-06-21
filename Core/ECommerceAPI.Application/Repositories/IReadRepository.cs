@@ -11,15 +11,15 @@ namespace ECommerceAPI.Application.Repositories
     {
         //get data from database
         //Sorgular ile çalışacağım için IQueryable kullanıyorum. Eğer Inmemory çalışsaydım IEnumarable kullanacaktım.
-        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(bool tracking = true);
 
         //Şartlı veri sorgulamak için kullanılır
-        IQueryable<T> GetWhere(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetWhere(System.Linq.Expressions.Expression<Func<T, bool>> predicate, bool tracking = true);
 
         //Belirlenen şarta uyan Tek bir değeri vermesi için kullanılır
-        Task<T> GetValueAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate);
+        Task<T> GetValueAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate, bool tracking = true);
 
-        Task<T> GetByIdAsync(string id);
+        Task<T> GetByIdAsync(string id, bool tracking = true);
         
         
         

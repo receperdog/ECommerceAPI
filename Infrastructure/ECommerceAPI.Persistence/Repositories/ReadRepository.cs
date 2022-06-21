@@ -34,6 +34,8 @@ namespace ECommerceAPI.Persistence.Repositories
         public async Task<T> GetValueAsync(Expression<Func<T, bool>> predicate) => await Table.FirstOrDefaultAsync(predicate);
 
         //Base entity marker pattern'i oluyor.
-        public async Task<T> GetByIdAsync(string id) => await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+        public async Task<T> GetByIdAsync(string id) => await Table.FindAsync(Guid.Parse(id));
+
+
     }
 }
