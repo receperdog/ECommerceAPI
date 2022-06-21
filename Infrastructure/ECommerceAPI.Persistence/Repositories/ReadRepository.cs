@@ -28,13 +28,40 @@ namespace ECommerceAPI.Persistence.Repositories
         public DbSet<T> Table => _context.Set<T>();
 
         //Burada Table nesnesi bize veri tabanındaki verileri getirir.
-        public IQueryable<T> GetAll() => Table;
+        public IQueryable<T> GetAll(bool tracking = true) {
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate) => Table.Where(predicate);
-        public async Task<T> GetValueAsync(Expression<Func<T, bool>> predicate) => await Table.FirstOrDefaultAsync(predicate);
+            return tracking ? Table.AsQueryable() : Table.AsQueryable().AsNoTracking();
 
+        }
+
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate, bool tracking = true)
+        {
+
+            return tracking ? Table.Where(predicate).AsQueryable() : Table.Where(predicate).AsQueryable().AsNoTracking();
+
+        }
+
+        public async Task<T> GetValueAsync(Expression<Func<T, bool>> predicate, bool tracking = true) {
+
+            var query = tracking ? Table.Where(predicate).AsQueryable() : Table.Where(predicate).AsQueryable().AsNoTracking();
+            return await query.FirstOrDefaultAsync(predicate);
+
+        }
         //Base entity marker pattern'i oluyor.
-        public async Task<T> GetByIdAsync(string id) => await Table.FindAsync(Guid.Parse(id));
+        public async Task<T> GetByIdAsync(string id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (tracking)
+            {
+                query = query.AsTracking();
+            }
+            else
+            {
+                query = query.AsNoTracking();
+            }
+            return await query.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+
+        }
 
 
     }
