@@ -16,7 +16,6 @@ namespace ECommerceAPI.Domain.Entities
 
         //Bir Siparişin bir tane müşterisi olabilir
         public Customer Customer { get; set; }
-        public Guid CustomerId { get; set; }
 
     }
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerceAPI.Persistence.Migrations
 {
     [DbContext(typeof(ECommerceAPIDbContext))]
-    [Migration("20220621142113_mig_1")]
-    partial class mig_1
+    [Migration("20220621193906_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,12 +64,6 @@ namespace ECommerceAPI.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("City")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -82,32 +76,8 @@ namespace ECommerceAPI.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<string>("OrderCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OrderNote")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OrderStatus")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentStatus")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ShippingStatus")
-                        .HasColumnType("text");
-
-                    b.Property<string>("State")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
