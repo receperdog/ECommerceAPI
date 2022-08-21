@@ -1,4 +1,4 @@
-r# **Senior Design Project**
+**Senior Design Project**
 
 \
 The aim of this repository:
